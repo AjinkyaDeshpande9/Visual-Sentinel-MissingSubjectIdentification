@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Detection Result</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(310deg, rgba(0,0,0,1) 0%, rgb(52, 52, 53) 35%, rgb(133, 133, 134) 100%);
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 10px;
+            color: #fff;
+        }
+        .container {
+            width: 80%;
+            display: flex;
+            flex-direction: row;
+        }
+        .left-column {
+            flex: 1;
+        }
+        .right-column {
+            flex: 1;
+            margin-left: 20px; /* Add some space between left and right columns */
+        }
+        .heading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .class-names {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .class-names li {
+            margin-bottom: 10px;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%; /* Make the search input fill the width of its container */
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .search-btn {
+            width: 100%; /* Make the search button fill the width of its container */
+            padding: 8px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-column">
+            <h1 class="heading">Combined Class Names</h1>
+            <ul class="class-names">
+                {% for class_name in combined_class_names %}
+                    <li>{{ class_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="right-column">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for license plate...">
+                <button onclick="search()" class="search-btn">Search</button>
+            </div>
+            <div id="results"></div> <!-- Container for similarity scores -->
+        </div>
+    </div>
+    <script>
+        function search() {
+            var input = document.getElementById('searchInput').value;
+            // Make an AJAX request to the same route
+            fetch('/identification', {
+                method: 'POST',
+                body: new URLSearchParams({input_string: input}),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+function displayResults(matches) {
+    var resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = ''; // Clear previous results
+    if (matches.error) {
+        resultsContainer.textContent = matches.error;
+    } else {
+        matches.forEach(match => {
+            var div = document.createElement('div');
+            div.innerHTML = `
+                <p>PATH: ${match[0]}</p>
+                <p>COMBINED CLASS NAMES: ${match[1]}</p>
+                <p>SIMILARITY RATIO: ${match[2]}</p>
+                <hr>
+            `;
+            resultsContainer.appendChild(div);
+        });
+    }
+}
+
+    </script>
+</body>
+</html>

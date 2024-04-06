@@ -1,0 +1,14 @@
+Flask
+opencv-python
+numpy
+tensorflow
+torch
+pandas
+torchvision
+IPython
+ultralytics
+roboflow
+deepface
+flask_cors
+werkzeug
+ffmpeg
