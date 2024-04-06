@@ -2,6 +2,7 @@ Flask
 opencv-python
 numpy
 tensorflow
+tf-keras
 torch
 pandas
 torchvision
