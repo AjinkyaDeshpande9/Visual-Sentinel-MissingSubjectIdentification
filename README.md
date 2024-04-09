@@ -13,7 +13,7 @@ To get a local copy up and running follow these simple steps.
 1. Clone the repository to your local machine:
 
    ```
-   git clone https://github.com/Daffril/Visual-Sentinel.git](https://github.com/TIFRCOMPFCRIT/Visual-Sentinel.git
+   git clone https://github.com/TIFRCOMPFCRIT/Visual-Sentinel.git
 2. Open a terminal or command prompt and navigate to the cloned repository's directory.
    ```
    cd Visual-Sentinel
